@@ -86,7 +86,6 @@ export const useChatStore = create((set, get) => ({
         set({
             messagesNotRead: messagesNotRead.splice(index, 1),
         });
-        console.log("222",userId)
         });
         
     }
