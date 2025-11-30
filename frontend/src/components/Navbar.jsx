@@ -17,18 +17,20 @@ const Navbar = () => {
                 </Link>
             </div>
             <div className="flex items-center gap-2">
-                <Link to={"/settings"} className={`btn btn-sm gap-2 transition-colors`}>
-                    <Settings className="w-4 h-4" />
-                    <span className="hidden sm:inline">Settings</span>
-                </Link>
                 {authUser && (
                     <>
-                        <Link to={"/profile"} className={`btn btn-sm gap-2`}>
-                            <User className="size-5"/>
-                            <span className="hidden sm:inline">Profile</span>
+                        <Link to={"/profile"} className={`chat-image avatar flex items-center justify-center`}>
+                            <div className="relative mx-auto lg:mx-0 size-10 rounded-full border border-green-500">
+                                <img src={authUser.profilePic || "/avatar.png"} alt={authUser.name} className="size-12 object-cover rounded-full"/>
+                            </div>
                         </Link>
 
-                        <button className="flex gap-2 items-center" onClick={logout}>
+                        <Link to={"/settings"} className={`btn btn-sm gap-2 transition-colors`}>
+                            <Settings className="w-4 h-4" />
+                            <span className="hidden sm:inline">Settings</span>
+                        </Link>
+                        
+                        <button className="btn btn-sm flex gap-2 items-center" onClick={logout}>
                             <LogOut className="size-5"/>
                             <span className="hidden sm:inline">Logout</span>
                         </button>

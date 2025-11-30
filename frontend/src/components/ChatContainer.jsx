@@ -50,7 +50,7 @@ const ChatContainer = () => {
                             <time className="text-xs opacity-50 ml-1">{formatMessageTime(message.createdAt)}</time>
                         </div>
                         
-                        <div className="chat-bubble flex flex-col">
+                        <div key={message._id} className={`chat-bubble flex flex-col  ${message.senderId === authUser._id ? "chat-bubble-primary":"chat-bubble-secondary"}`}>
                             {message.image && (
                                 <img src={message.image} alt="Attachment" className="chat-bubble-secondary sm:max-w-[200px] rounded-md mb-2"/>
                             )}
