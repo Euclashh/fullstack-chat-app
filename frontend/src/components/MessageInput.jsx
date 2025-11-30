@@ -36,6 +36,7 @@ const MessageInput = ()=> {
             await sendMessage({
                 text: text.trim(),
                 image:imagePreview,
+                read: false
             });
 
             // Clear form

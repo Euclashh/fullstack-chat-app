@@ -9,6 +9,7 @@ export const useChatStore = create((set, get) => ({
     selectedUser: null,
     isUserLoading: false,
     isMessagesLoading: false,
+    messagesNotRead: [],
     getUsers: async () => {
         set({isUserLoading: true});
         try {
@@ -26,10 +27,21 @@ export const useChatStore = create((set, get) => ({
         try {
             const res = await axiosInstance.get(`messages/${userId}`);
             set({messages: res.data});
+            
         } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error);
         }finally{
             set({isMessagesLoading: false})
+        }
+    },
+
+    getUnreadMessages: async (userId) => {
+        
+        try {
+            const res = await axiosInstance.get(`/messages/unread/${userId}`);
+            set({messagesNotRead: res.data});
+        } catch (error) {
+            toast.error(error.response.data.message);
         }
     },
 
@@ -43,20 +55,20 @@ export const useChatStore = create((set, get) => ({
         }
     },
     subscribeToMessages: () => {
-    const { selectedUser } = get();
-    if (!selectedUser) return;
+        const { selectedUser } = get();
+        if (!selectedUser) return;
 
-    const socket = useAuthStore.getState().socket;
+        const socket = useAuthStore.getState().socket;
 
-    socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
+        socket.on("newMessage", (newMessage) => {
+        const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+        if (!isMessageSentFromSelectedUser) return;
 
-      set({
-        messages: [...get().messages, newMessage],
-      });
-    });
-  },
+        set({
+            messages: [...get().messages, newMessage],
+        });
+        });
+    },
 
     unsubscribeFromMessages: ()=>{
         const socket = useAuthStore.getState().socket;
@@ -65,4 +77,17 @@ export const useChatStore = create((set, get) => ({
     },
 
     setSelectedUser: (selectedUser) => set({ selectedUser }),
+
+    readMessages: (selectedUser)=>{
+        const socket = useAuthStore.getState().socket;
+        const {messagesNotRead}= get();
+        socket.on("unreadUsers", (userId) => {
+        const index = messagesNotRead.indexOf(userId)
+        set({
+            messagesNotRead: messagesNotRead.splice(index, 1),
+        });
+        console.log("222",userId)
+        });
+        
+    }
 }))

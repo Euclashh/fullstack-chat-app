@@ -7,14 +7,17 @@ import { useEffect, useState } from "react";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading, getUnreadMessages, messagesNotRead, readMessages } = useChatStore();
 
-  const {onlineUsers}  = useAuthStore() ;
+  const {onlineUsers, authUser}  = useAuthStore() ;
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
   useEffect(() =>{
-    getUsers()
-  }, [getUsers])
+    getUsers(),
+    getUnreadMessages(authUser._id),
+    readMessages(selectedUser?._id)
+    
+  }, [getUsers,getUnreadMessages, readMessages, selectedUser?._id])
   const filteredUsers = showOnlineOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
 
   if (isUsersLoading) return <SidebarSkeleton/>
@@ -38,10 +41,11 @@ const Sidebar = () => {
         
         <div className="overflow-y-auto w-full py-3">
             {filteredUsers.map((user) => (
+
                 <button key={user._id} onClick={() => setSelectedUser(user)} className={`w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors 
-                ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}`}>
-                    <div className="relative mx-auto lg:mx-0">
-                        <img src={user.profilePic || "/avatar.png"} alt={user.name} className="size-12 object-cover rounded-full"/>
+                ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""} ${messagesNotRead.includes(user._id) ? "animate-pulse bg-accent border border-black" : ""}`}>
+                    <div className={`relative mx-auto lg:mx-0 ${messagesNotRead.includes(user._id) ? "rounded-full  border border-red-500" : ""}`}>
+                        <img src={user.profilePic || "/avatar.png"} alt={user.name} className="size-12 object-cover rounded-full bg-gray-300"/>
                         {onlineUsers.includes(user._id) && (
                             <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900"/>
                         )}

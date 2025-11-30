@@ -26,6 +26,7 @@ app.use(cors({
 
 app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes)
+app.use("/api/unread", messageRoutes)
 
 if(process.env.NODE_ENV==="production"){
     app.use(express.static(path.join(__dirname, "../frontend/dist")));

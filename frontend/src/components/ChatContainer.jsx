@@ -13,7 +13,6 @@ const ChatContainer = () => {
 
     useEffect(() =>{
         getMessages(selectedUser._id);
-
         subscribeToMessages();
 
         return () => unsubscribeFromMessages();
@@ -52,7 +51,7 @@ const ChatContainer = () => {
                         
                         <div key={message._id} className={`chat-bubble flex flex-col  ${message.senderId === authUser._id ? "chat-bubble-primary":"chat-bubble-secondary"}`}>
                             {message.image && (
-                                <img src={message.image} alt="Attachment" className="chat-bubble-secondary sm:max-w-[200px] rounded-md mb-2"/>
+                                <img src={message.image} alt="Attachment" className="chat-bubble sm:max-w-[200px] rounded-md mb-2"/>
                             )}
                             {message.text && <p>{message.text}</p>}
                         </div>
