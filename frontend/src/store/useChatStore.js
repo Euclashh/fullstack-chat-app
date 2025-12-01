@@ -87,7 +87,7 @@ export const useChatStore = create((set, get) => ({
         const index = messagesNotRead.indexOf(userId)
         console.log("index", index)
         let messagesSpliced = messagesNotRead;
-        if(index) {messagesSpliced= messagesNotRead.splice(index, 1)}
+        if(index!=-1) {messagesSpliced= messagesNotRead.splice(index, 1)}
         console.log("splice",messagesSpliced)
         set({
             messagesNotRead: messagesSpliced,
