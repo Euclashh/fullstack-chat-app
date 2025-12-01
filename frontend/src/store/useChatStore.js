@@ -82,7 +82,10 @@ export const useChatStore = create((set, get) => ({
         const socket = useAuthStore.getState().socket;
         const {messagesNotRead}= get();
         socket.on("unreadUsers", (userId) => {
+            console.log("id",userId)
+            console.log("array",messagesNotRead)
         const index = messagesNotRead.indexOf(userId)
+        console.log("splice",messagesNotRead.splice(index, 1))
         set({
             messagesNotRead: messagesNotRead.splice(index, 1),
         });
